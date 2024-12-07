@@ -133,7 +133,7 @@ function App() {
         <iframe
   onLoad={() => {
     if (submitted) {
-      window.location.href = "/commentlist"; // リロードを行う
+      window.location.href = "/bgm"; // リロードを行う
     }
   }}
   id="hidden_iframe"

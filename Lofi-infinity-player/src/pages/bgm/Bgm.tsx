@@ -3,6 +3,7 @@ import bgmUrls from "./dummyBgms"
 import effectUrls from "./dummyEffetcts"
 import { useState } from 'react';
 import dummyBgms from './dummyBgms';
+import CommentGet from '../../components/screen/CommentGet'
 
 const BGMs = () => {
 
@@ -77,8 +78,11 @@ const BGMs = () => {
   }
 
   return (
-    <div>
-      <div className='BGMs'>
+    <div className='relative'>
+      <div className='absolute'>
+      <CommentGet/>
+      </div>
+      <div className='absolute z-[-1]'>
         <div className='BGM'>
           <YouTube videoId={ bgmUrl } opts={bgmOpts} onReady={onBgmReady} onStateChange={onStateChange} onEnd={onBgmEnd} />
         </div>
