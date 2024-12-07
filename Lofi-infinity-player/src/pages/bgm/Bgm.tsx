@@ -10,6 +10,9 @@ const BGMs = () => {
   const [bgmUrl, setBgmData] = useState(dummyBgms[Math.floor(Math.random() * bgmUrls.length)])
   let playedBgms = []
 
+  let bgmVolume = 50;
+  let effectVolume = 50;
+
   const onBgmReady : YouTubeProps["onReady"] = (event) => {
 
     event.target.playVideo()
@@ -51,7 +54,6 @@ const BGMs = () => {
 
     event.target.seekTo(0, true);
   }
-  
 
   const bgmOpts = {
     height: '390',
@@ -60,7 +62,8 @@ const BGMs = () => {
       fs: 0,
       autoplay: 0,
       disablekb: 1,
-      color: "white"
+      color: "white",
+      rel: 0
     }
   }
 
@@ -72,7 +75,8 @@ const BGMs = () => {
       fs: 0,
       autoplay: 0,
       disablekb: 1,
-      color: "white"
+      color: "white",
+      rel: 0
     }
   }
 
@@ -80,10 +84,19 @@ const BGMs = () => {
     <div>
       <div className='BGMs'>
         <div className='BGM'>
-          <YouTube videoId={ bgmUrl } opts={bgmOpts} onReady={onBgmReady} onStateChange={onStateChange} onEnd={onBgmEnd} />
+          <YouTube videoId={ bgmUrl } 
+            opts={bgmOpts} 
+            onReady={onBgmReady} 
+            onStateChange={onStateChange} 
+            onEnd={onBgmEnd}
+          />
         </div>
         <div className='BGM'>
-          <YouTube videoId={ effectUrl } opts={effectOpts} onReady={onEffectReady} onEnd={onEffectEnd}/>
+          <YouTube videoId={ effectUrl } 
+            opts={effectOpts} 
+            onReady={onEffectReady} 
+            onEnd={onEffectEnd}
+          />
         </div>
       </div>
     </div>
