@@ -2,37 +2,31 @@ import React, { useState } from "react";
 
 const Comment = () => {
   const [submitted, setSubmitted] = useState(false);
-  const [formData, setFormData] = useState({
-    entry_2011066903: "", // コメント
-  });
+  const [formData, setFormData] = useState("");
 
   const NGComments = ["死ね", "バカ", ".exe"];
   const regex = new RegExp(NGComments.join("|"));
 
-  const handleChange = (e:React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const text: string = e.target.value;
+    setFormData(text);
   };
 
-  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     // e.preventDefault();
-    if (formData.entry_2011066903.match(regex)) {
+    if (formData.match(regex)) {
       alert("ERROR: コメントにNGワードが含まれています");
       return false;
     }
 
     // エスケープ処理
-    const escapedData = {
-      ...formData,
-      entry_2011066903: formData.entry_2011066903.replace(/</g, "&lt;"),
-    };
+    const escapedData: string = formData.replace(/</g, "&lt;");
+    
 
     console.log("送信するデータ:", escapedData);
-
-    setSubmitted(true); // フラグを設定
-    // 実際にはここでフォーム送信のロジックを書く
-
+    setSubmitted(true)
   };
+
 
   return (
     <div>
@@ -50,8 +44,8 @@ const Comment = () => {
             cols={40}
             maxLength={400}
             required
-            //</p>value={formData.entry_2011066903}
-            //onChange={(e)=>handleChange(e)}
+            value={formData}
+            onChange={(e)=>handleChange(e)}
           ></textarea>
         </p>
         <input type="submit" id="submitbutton" value="送信" />

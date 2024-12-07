@@ -21,17 +21,41 @@ const popUpVariants = {
 };
 
 function App() {
-  const [dailyGoal, setDailyGoal] = useState("");
-  const [isWorking, setIsWorking] = useState(false);
+  // const [isWorking, setIsWorking] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState("");
 
-  const handleStartWork = () => {
-    setIsWorking(true);
+  // const handleStartWork = () => {
+  //   setIsWorking(true);
+  // };
+
+  // if (isWorking) {
+  //   return <Comment></Comment>
+  //   //return <WorkScreen dailyGoal={dailyGoal} />;
+  // }
+
+  const NGComments = ["死ね", "バカ", ".exe"];
+  const regex = new RegExp(NGComments.join("|"));
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const text: string = e.target.value;
+    setFormData(text);
   };
 
-  if (isWorking) {
-    return <Comment></Comment>
-    //return <WorkScreen dailyGoal={dailyGoal} />;
-  }
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    // e.preventDefault();
+    if (formData.match(regex)) {
+      alert("ERROR: コメントにNGワードが含まれています");
+      return false;
+    }
+
+    // エスケープ処理
+    const escapedData: string = formData.replace(/</g, "&lt;");
+    
+
+    console.log("送信するデータ:", escapedData);
+    setSubmitted(true)
+  };
 
   return (
     <motion.main
@@ -72,6 +96,12 @@ function App() {
           animate="visible"
           className="mb-8"
         >
+          <form
+           action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfVg1ZIQ_9bl8DCTaHTfLDs3hBikF32FrnyoCxWgwIZ32dJCQ/formResponse"
+           target="hidden_iframe"
+           method="post"
+           onSubmit={(e)=>handleSubmit(e)}
+          >
           <label
             htmlFor="dailyGoal"
             className="block text-sm font-medium text-gray-700 mb-2"
@@ -81,22 +111,37 @@ function App() {
           <Input
             type="text"
             id="dailyGoal"
-            value={dailyGoal}
-            onChange={(e) => setDailyGoal(e.target.value)}
             placeholder="目標を入力してください"
             className="w-full"
+            name="entry.2011066903"
+            required
+            value={formData}
+            onChange={(e)=>handleChange(e)}
           />
-        </motion.div>
-        <motion.div
+           <motion.div
           custom={3}
           variants={popUpVariants}
           initial="hidden"
           animate="visible"
         >
-          <Button onClick={handleStartWork} className="w-full">
+          <Button className="w-full" type="submit" value="送信">
             作業開始
           </Button>
         </motion.div>
+          </form>
+        </motion.div>
+        <iframe
+  onLoad={() => {
+    if (submitted) {
+      window.location.href = "/commentlist"; // リロードを行う
+    }
+  }}
+  id="hidden_iframe"
+  name="hidden_iframe"
+  style={{ display: "none" }}
+></iframe>
+
+       
       </div>
     </motion.main>
   );
