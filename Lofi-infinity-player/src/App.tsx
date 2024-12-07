@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import WorkScreen from "./components//screen/WorkScreen";
+import Comment from "./components/screen/Comment";
 
 const popUpVariants = {
   hidden: { opacity: 0, scale: 0.8, y: 50 },
@@ -28,7 +29,8 @@ function App() {
   };
 
   if (isWorking) {
-    return <WorkScreen dailyGoal={dailyGoal} />;
+    return <Comment></Comment>
+    //return <WorkScreen dailyGoal={dailyGoal} />;
   }
 
   return (
