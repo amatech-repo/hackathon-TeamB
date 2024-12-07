@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import WorkScreen from "./components//screen/WorkScreen";
+import WorkScreen from "./components/screen/WorkScreen";
 import Comment from "./components/screen/Comment";
 
 const popUpVariants = {
