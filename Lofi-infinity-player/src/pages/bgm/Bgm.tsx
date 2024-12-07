@@ -1,23 +1,33 @@
-import YouTube ,{YouTubeProps} from 'react-youtube';
+import YouTube ,{YouTubeEvent, YouTubePlayer, YouTubeProps} from 'react-youtube';
 import bgmUrls from "./dummyBgms"
 import effectUrls from "./dummyEffetcts"
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import dummyBgms from './dummyBgms';
 import CommentGet from '../../components/screen/CommentGet'
 
 const BGMs = () => {
 
+  let playedBgms = [];
+
   let effectUrl = effectUrls[0]
+
   const [bgmUrl, setBgmData] = useState(dummyBgms[Math.floor(Math.random() * bgmUrls.length)])
-  let playedBgms = []
+  const [bgmVolume, setBgmVolume] = useState(50);
+  const [effectVolume, setEffectVolume] = useState(50);
 
-  const onBgmReady : YouTubeProps["onReady"] = (event) => {
+  const bgmRef: React.MutableRefObject<YouTubePlayer> = useRef(null);
+  const effectRef: React.MutableRefObject<YouTubePlayer> = useRef(null);
 
-    event.target.playVideo()
-    console.log("BGM start!!")
+  const onBgmReady : YouTubeProps["onReady"] = (event:YouTubeEvent) => {
+
+    event.target.playVideo();
+    console.log("BGM start!!");
+    event.target.setVolume(bgmVolume);
+
+    bgmRef.current = event.target;
   };
 
-  const onBgmEnd : YouTubeProps["onEnd"] = (event) => {
+  const onBgmEnd : YouTubeProps["onEnd"] = (_event) => {
 
     playedBgms.push(bgmUrl);
     console.log(playedBgms);
@@ -43,20 +53,41 @@ const BGMs = () => {
     }
   }
 
-  const onEffectReady : YouTubeProps["onReady"] = (event) => {
+  const onEffectReady : YouTubeProps["onReady"] = (event:YouTubeEvent) => {
     event.target.playVideo();
     console.log("Effect start");
+    event.target.setVolume(effectVolume);
+
+    effectRef.current = event.target;
   };
 
   const onEffectEnd : YouTubeProps["onEnd"] = (event) => {
 
     event.target.seekTo(0, true);
   }
-  
+
+  const onBgmHandleChange = (event:React.ChangeEvent<HTMLInputElement>)  => {
+    const newVolume = parseInt(event.target.value, 10);
+    setBgmVolume(newVolume);
+
+    if (bgmRef.current){
+      bgmRef.current.setVolume(newVolume);
+    }
+  }
+
+  const onEffectHandleChange = (event:React.ChangeEvent<HTMLInputElement>)  => {
+    const newVolume = parseInt(event.target.value, 10);
+    setEffectVolume(newVolume);
+
+    if (effectRef.current){
+      effectRef.current.setVolume(newVolume);
+    }
+  }
 
   const bgmOpts = {
     height: '390',
     width: '640',
+    
     playerVars: {
       fs: 0,
       autoplay: 0,
@@ -84,10 +115,28 @@ const BGMs = () => {
       </div>
       <div className='absolute z-[-1]'>
         <div className='BGM'>
-          <YouTube videoId={ bgmUrl } opts={bgmOpts} onReady={onBgmReady} onStateChange={onStateChange} onEnd={onBgmEnd} />
+          <YouTube videoId={ bgmUrl } opts={bgmOpts} onReady={(e:YouTubeEvent)=>onBgmReady(e)} onStateChange={onStateChange} onEnd={onBgmEnd} />
+          <input
+          id="volume"
+          type="range"
+          min="0"
+          max="100"
+          value={bgmVolume}
+          onChange={(e:React.ChangeEvent<HTMLInputElement>)=>onBgmHandleChange(e)}
+          style={{ width: "100%" }}
+        />
         </div>
         <div className='BGM'>
           <YouTube videoId={ effectUrl } opts={effectOpts} onReady={onEffectReady} onEnd={onEffectEnd}/>
+          <input
+          id="volume"
+          type="range"
+          min="0"
+          max="100"
+          value={effectVolume}
+          onChange={(e:React.ChangeEvent<HTMLInputElement>)=>onEffectHandleChange(e)}
+          style={{ width: "100%" }}
+        />
         </div>
       </div>
     </div>
