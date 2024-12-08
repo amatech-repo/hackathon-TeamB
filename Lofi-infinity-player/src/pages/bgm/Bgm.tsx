@@ -89,6 +89,10 @@ const BGMs = () => {
     }
   };
 
+  const onFinishTask = () => {
+    window.location.href = "./";
+  }
+
   const bgmOpts = {
     playerVars: {
       fs: 0,
@@ -142,6 +146,8 @@ const BGMs = () => {
             className="mt-4 w-full"
           />
         </div>
+
+        <button onClick={onFinishTask}>作業を終える</button>
 
         {/* 右側 エフェクトプレイヤーセクション（中央揃え） */}
         <div className="flex-1 items-center justify-center hidden">
