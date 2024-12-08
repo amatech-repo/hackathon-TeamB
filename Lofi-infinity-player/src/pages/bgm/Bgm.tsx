@@ -31,22 +31,7 @@ const BGMs = () => {
     bgmRef.current = event.target;
   };
 
-  const onBgmEnd: YouTubeProps["onEnd"] = (_event) => {
-    playedBgms.push(bgmUrl);
-    console.log(playedBgms);
-
-    let setUrl = bgmUrls[Math.floor(Math.random() * bgmUrls.length)];
-
-    while (playedBgms.includes(setUrl)) {
-      setUrl = bgmUrls[Math.floor(Math.random() * bgmUrls.length)];
-
-      if (playedBgms.length === bgmUrls.length) {
-        playedBgms.splice(0);
-      }
-    }
-
-    setBgmData(setUrl);
-  };
+  const onBgmEnd: YouTubeProps["onEnd"] = (_event) => onBgmChange()
 
   const onStateChange: YouTubeProps["onStateChange"] = (event) => {
     if (
@@ -70,6 +55,23 @@ const BGMs = () => {
   const onEffectEnd: YouTubeProps["onEnd"] = (event) => {
     event.target.seekTo(0, true);
   };
+
+  const onBgmChange = () => {
+    playedBgms.push(bgmUrl);
+    console.log(playedBgms);
+
+    let setUrl = bgmUrls[Math.floor(Math.random() * bgmUrls.length)];
+
+    while (playedBgms.includes(setUrl)) {
+      setUrl = bgmUrls[Math.floor(Math.random() * bgmUrls.length)];
+
+      if (playedBgms.length === bgmUrls.length) {
+        playedBgms.splice(0);
+      }
+    }
+
+    setBgmData(setUrl);
+  }
 
   const onBgmHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseInt(event.target.value, 10);
@@ -148,6 +150,7 @@ const BGMs = () => {
         </div>
 
         <button onClick={onFinishTask}>作業を終える</button>
+        <button onClick={onBgmChange}>曲を変更</button>
 
         {/* 右側 エフェクトプレイヤーセクション（中央揃え） */}
         <div className="flex-1 items-center justify-center hidden">
