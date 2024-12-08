@@ -6,7 +6,7 @@ import App from "./App.tsx";
 import Bgm from "./pages/bgm/Bgm.tsx";
 import EnvviromentSoundSettings from "./pages/enviroment-sound-settings/EnvviromentSoundSettings.tsx";
 import Result from "./pages/result/Result.tsx";
-import CommentGet from "./components/screen/CommentGet"
+import CommentGet from "./components/screen/CommentGet";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
@@ -20,7 +20,6 @@ createRoot(document.getElementById("root")!).render(
         ></Route>
         <Route path="/result" element={<Result />}></Route>
         <Route path="/commentlist" element={<CommentGet />}></Route>
-        
       </Routes>
     </StrictMode>
   </BrowserRouter>
