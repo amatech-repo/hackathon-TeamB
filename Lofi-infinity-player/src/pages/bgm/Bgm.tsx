@@ -8,6 +8,7 @@ import bgmUrls from "./dummyBgms";
 import effectUrls from "./dummyEffetcts";
 import dummyBgms from "./dummyBgms";
 import CommentGet from "../../components/screen/CommentGet";
+import { Button } from "@/components/ui/button";
 
 const BGMs = () => {
   let playedBgms = [];
@@ -149,8 +150,8 @@ const BGMs = () => {
           />
         </div>
 
-        <button onClick={onFinishTask}>作業を終える</button>
-        <button onClick={onBgmChange}>曲を変更</button>
+        <Button onClick={onFinishTask}>作業を終える</Button>
+        <Button onClick={onBgmChange}>曲を変更</Button>
 
         {/* 右側 エフェクトプレイヤーセクション（中央揃え） */}
         <div className="flex-1 items-center justify-center hidden">
