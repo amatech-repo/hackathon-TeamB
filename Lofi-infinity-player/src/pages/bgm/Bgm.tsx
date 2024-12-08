@@ -8,6 +8,7 @@ import bgmUrls from "./dummyBgms";
 import effectUrls from "./dummyEffetcts";
 import dummyBgms from "./dummyBgms";
 import CommentGet from "../../components/screen/CommentGet";
+
 import {
   Drawer,
   DrawerClose,
@@ -19,6 +20,7 @@ import {
   DrawerTrigger,
 } from "../../components/ui/drawer";
 import { Button } from "../../components/ui/button";
+import { contours } from "d3";
 
 const BGMs = () => {
   let playedBgms = [];
@@ -41,22 +43,7 @@ const BGMs = () => {
     bgmRef.current = event.target;
   };
 
-  const onBgmEnd: YouTubeProps["onEnd"] = (_event) => {
-    playedBgms.push(bgmUrl);
-    console.log(playedBgms);
-
-    let setUrl = bgmUrls[Math.floor(Math.random() * bgmUrls.length)];
-
-    while (playedBgms.includes(setUrl)) {
-      setUrl = bgmUrls[Math.floor(Math.random() * bgmUrls.length)];
-
-      if (playedBgms.length === bgmUrls.length) {
-        playedBgms.splice(0);
-      }
-    }
-
-    setBgmData(setUrl);
-  };
+  const onBgmEnd: YouTubeProps["onEnd"] = (_event) => onBgmChange()
 
   const onStateChange: YouTubeProps["onStateChange"] = (event) => {
     if (
@@ -80,6 +67,23 @@ const BGMs = () => {
   const onEffectEnd: YouTubeProps["onEnd"] = (event) => {
     event.target.seekTo(0, true);
   };
+
+  const onBgmChange = () => {
+    playedBgms.push(bgmUrl);
+    console.log(playedBgms);
+
+    let setUrl = bgmUrls[Math.floor(Math.random() * bgmUrls.length)];
+
+    while (playedBgms.includes(setUrl)) {
+      setUrl = bgmUrls[Math.floor(Math.random() * bgmUrls.length)];
+
+      if (playedBgms.length === bgmUrls.length) {
+        playedBgms.splice(0);
+      }
+    }
+
+    setBgmData(setUrl);
+  }
 
   const onBgmHandleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseInt(event.target.value, 10);
@@ -111,12 +115,18 @@ const BGMs = () => {
     setEffectData(effectUrls[2]);
   };
 
+  const onFinishTask = () => {
+    window.location.href = "./";
+  }
+
+
   const bgmOpts = {
     playerVars: {
       fs: 0,
       autoplay: 0,
       disablekb: 1,
       color: "white",
+      controls :0
     },
   };
   // height: "390",
@@ -147,7 +157,8 @@ const BGMs = () => {
             iframeClassName="w-full h-full"
             className="w-full aspect-[640/360]"
           />
-          <input
+          <div className="flex">
+            <input
             id="volume"
             type="range"
             min="0"
@@ -158,6 +169,13 @@ const BGMs = () => {
             }
             className="mt-4 w-full"
           />
+          <div className="flex justly-center pt-3">
+            <Button onClick={onFinishTask}>作業を終える</Button>
+            <Button onClick={onBgmChange}>曲を変更</Button>
+          </div>
+          
+          </div>
+          
         </div>
         {/* 右側 エフェクトプレイヤーセクション（中央揃え） */}
         <div className="hidden">
