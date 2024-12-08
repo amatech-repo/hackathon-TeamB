@@ -85,8 +85,8 @@ function CommentGet() {
       ref={containerRef}
       className="relative overflow-hidden p-10"
       style={{
-        width: "100vw",
-        height: "50vh",
+        width: "100%",
+        height: "100%",
         // background: "#000" // 背景色はお好みで
       }}
     >

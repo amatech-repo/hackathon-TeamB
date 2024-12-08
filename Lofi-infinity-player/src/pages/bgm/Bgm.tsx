@@ -8,17 +8,27 @@ import bgmUrls from "./dummyBgms";
 import effectUrls from "./dummyEffetcts";
 import dummyBgms from "./dummyBgms";
 import CommentGet from "../../components/screen/CommentGet";
-import { Button } from "@/components/ui/button";
+
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "../../components/ui/drawer";
+import { Button } from "../../components/ui/button";
 import { contours } from "d3";
 
 const BGMs = () => {
   let playedBgms = [];
 
-  let effectUrl = effectUrls[0];
-
   const [bgmUrl, setBgmData] = useState(
     dummyBgms[Math.floor(Math.random() * bgmUrls.length)]
   );
+  const [effectUrl, setEffectData] = useState(effectUrls[0]);
   const [bgmVolume, setBgmVolume] = useState(50);
   const [effectVolume, setEffectVolume] = useState(50);
 
@@ -93,9 +103,22 @@ const BGMs = () => {
     }
   };
 
+  const amaotoClick = () => {
+    setEffectData(effectUrls[0]);
+  };
+
+  const takibiClick = () => {
+    setEffectData(effectUrls[1]);
+  };
+
+  const zattoClick = () => {
+    setEffectData(effectUrls[2]);
+  };
+
   const onFinishTask = () => {
     window.location.href = "./";
   }
+
 
   const bgmOpts = {
     playerVars: {
@@ -119,16 +142,11 @@ const BGMs = () => {
   };
 
   return (
-    <div className="relative">
-      {/* コメント表示 */}
-      <div className="absolute top-0 left-0 w-full">
-        <CommentGet />
-      </div>
-
+    <div className="flex flex-col p-16 max-w-full mx-auto">
       {/* メインコンテンツエリア */}
-      <div className="absolute z-[-1] flex w-full p-32">
+      <div className="w-full mx-auto">
         {/* 左側 BGM プレイヤーセクション */}
-        <div className="bg-gray-800 p-6 rounded-lg shadow-xl flex flex-col w-full">
+        <div className="bg-gray-800 p-6 rounded-lg shadow-xl flex flex-col w-4/5 mx-auto">
           <YouTube
             videoId={bgmUrl}
             // opts で width, height を指定しない
@@ -159,30 +177,61 @@ const BGMs = () => {
           </div>
           
         </div>
-
-        
-
         {/* 右側 エフェクトプレイヤーセクション（中央揃え） */}
-        <div className="flex-1 items-center justify-center hidden">
-          <div className="bg-gray-800 p-6 rounded-lg shadow-xl flex flex-col items-center">
+        <div className="hidden">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-xl flex flex-col w-4/5">
             <YouTube
               videoId={effectUrl}
               opts={effectOpts}
               onReady={onEffectReady}
               onEnd={onEffectEnd}
-            />
-            <input
-              id="volume"
-              type="range"
-              min="0"
-              max="100"
-              value={effectVolume}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onEffectHandleChange(e)
-              }
-              className="mt-4 w-full"
+              iframeClassName="w-full h-full"
+              className="w-full aspect-[640/360]"
             />
           </div>
+        </div>
+
+        {/* コメント表示 */}
+        <div className="w-4/5">
+          <CommentGet />
+        </div>
+        <div className="mx-auto w-fit">
+          <Drawer>
+            <DrawerTrigger>
+              <Button variant="outline">環境音設定</Button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerHeader>
+                <DrawerTitle>環境音の設定</DrawerTitle>
+                <DrawerDescription>
+                  環境音の種類と音量を設定できます。
+                </DrawerDescription>
+              </DrawerHeader>
+              <div className="flex w-4/12 mx-auto justify-between">
+                <Button onClick={amaotoClick}>雨音</Button>
+                <Button onClick={takibiClick}>焚き火</Button>
+                <Button onClick={zattoClick}>雑踏</Button>
+              </div>
+
+              <label className="w-4/5 mx-auto">環境音の音量調節</label>
+              <input
+                id="volume"
+                type="range"
+                min="0"
+                max="100"
+                value={effectVolume}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  onEffectHandleChange(e)
+                }
+                className="mt-4 w-4/5 mx-auto"
+              />
+              <DrawerFooter>
+                <DrawerClose>
+                  <Button variant="outline">閉じる</Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
         </div>
       </div>
     </div>
