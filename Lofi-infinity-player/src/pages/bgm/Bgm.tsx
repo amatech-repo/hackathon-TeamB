@@ -26,7 +26,7 @@ const BGMs = () => {
   let playedBgms = [];
 
   const [bgmUrl, setBgmData] = useState(
-    dummyBgms[Math.floor(Math.random() * bgmUrls.length)]
+    bgmUrls[Math.floor(Math.random() * bgmUrls.length)]
   );
   const [effectUrl, setEffectData] = useState(effectUrls[0]);
   const [bgmVolume, setBgmVolume] = useState(50);
@@ -102,22 +102,10 @@ const BGMs = () => {
       effectRef.current.setVolume(newVolume);
     }
   };
-
-  const amaotoClick = () => {
-    setEffectData(effectUrls[0]);
-  };
-
-  const takibiClick = () => {
-    setEffectData(effectUrls[1]);
-  };
-
-  const zattoClick = () => {
-    setEffectData(effectUrls[2]);
-  };
-
   const onFinishTask = () => {
     window.location.href = "./";
   }
+
 
 
   const bgmOpts = {
@@ -147,6 +135,7 @@ const BGMs = () => {
       <div className="w-full mx-auto">
         {/* 左側 BGM プレイヤーセクション */}
         <div className="bg-gray-800 p-6 rounded-lg shadow-xl flex flex-col w-4/5 mx-auto">
+          
           <YouTube
             videoId={bgmUrl}
             // opts で width, height を指定しない
@@ -157,60 +146,24 @@ const BGMs = () => {
             iframeClassName="w-full h-full"
             className="w-full aspect-[640/360]"
           />
-          <div className="flex">
-            <input
-            id="volume"
-            type="range"
-            min="0"
-            max="100"
-            value={bgmVolume}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              onBgmHandleChange(e)
-            }
-            className="mt-4 w-full"
-          />
-          <div className="flex justly-center pt-3">
-            <Button onClick={onFinishTask}>作業を終える</Button>
-            <Button onClick={onBgmChange}>曲を変更</Button>
-          </div>
-          
-          </div>
-          
-        </div>
-        {/* 右側 エフェクトプレイヤーセクション（中央揃え） */}
-        <div className="hidden">
-          <div className="bg-gray-800 p-6 rounded-lg shadow-xl flex flex-col w-4/5">
-            <YouTube
-              videoId={effectUrl}
-              opts={effectOpts}
-              onReady={onEffectReady}
-              onEnd={onEffectEnd}
-              iframeClassName="w-full h-full"
-              className="w-full aspect-[640/360]"
-            />
-          </div>
-        </div>
 
-        {/* コメント表示 */}
-        <div className="w-4/5">
-          <CommentGet />
-        </div>
-        <div className="mx-auto w-fit">
+          <div className="flex justfy-between max-md:inline-block mt-4">
           <Drawer>
             <DrawerTrigger>
-              <Button variant="outline">環境音設定</Button>
+              <Button className="mx-2"><img src="public/menu_24dp_D9D9D9_FILL0_wght400_GRAD0_opsz24.svg" alt="menu" className="w-10 h-10"/></Button>
             </DrawerTrigger>
             <DrawerContent>
               <DrawerHeader>
-                <DrawerTitle>環境音の設定</DrawerTitle>
+                <DrawerTitle>環境音変更</DrawerTitle>
                 <DrawerDescription>
                   環境音の種類と音量を設定できます。
                 </DrawerDescription>
               </DrawerHeader>
               <div className="flex w-4/12 mx-auto justify-between">
-                <Button onClick={amaotoClick}>雨音</Button>
-                <Button onClick={takibiClick}>焚き火</Button>
-                <Button onClick={zattoClick}>雑踏</Button>
+                <Button onClick={() => {setEffectData(effectUrls[0])}}>なし</Button>
+                <Button onClick={() => {setEffectData(effectUrls[1])}}>雨音</Button>
+                <Button onClick={() => {setEffectData(effectUrls[2])}}>焚き火</Button>
+                <Button onClick={() => {setEffectData(effectUrls[3])}}>雑踏</Button>
               </div>
 
               <label className="w-4/5 mx-auto">環境音の音量調節</label>
@@ -223,7 +176,7 @@ const BGMs = () => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   onEffectHandleChange(e)
                 }
-                className="mt-4 w-4/5 mx-auto"
+                className="w-4/5 mx-auto"
               />
               <DrawerFooter>
                 <DrawerClose>
@@ -232,6 +185,46 @@ const BGMs = () => {
               </DrawerFooter>
             </DrawerContent>
           </Drawer>
+            <input
+            id="volume"
+            type="range"
+            min="0"
+            max="100"
+            value={bgmVolume}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              onBgmHandleChange(e)
+            }
+            className="w-full h-1 mt-4"
+          />
+          <div className="flex justly-center">
+            <Button onClick={onBgmChange} className="mx-2"><img src="public/skip_next_24dp_D9D9D9_FILL0_wght400_GRAD0_opsz24.svg" alt="skip" className="w-10 h-10"/></Button>
+            <Button onClick={onFinishTask} className="mx-2"><img src="public/home_24dp_D9D9D9_FILL0_wght400_GRAD0_opsz24.svg" alt="home" className="w-10 h-10"/></Button>
+          </div>
+          
+          </div>
+          
+        </div>
+        {/* 右側 エフェクトプレイヤーセクション（中央揃え） */}
+        <div className="hidden">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-xl flex flex-col w-4/5">
+            <YouTube
+              videoId={effectUrl}
+              opts={effectOpts}
+              onReady={onEffectReady}
+              onStateChange={onStateChange}
+              onEnd={onEffectEnd}
+              iframeClassName="w-full h-full"
+              className="w-full aspect-[640/360]"
+            />
+          </div>
+        </div>
+
+        {/* コメント表示 */}
+        <div className="w-4/5">
+          <CommentGet />
+        </div>
+        <div className="mx-auto w-fit">
+          
         </div>
       </div>
     </div>
