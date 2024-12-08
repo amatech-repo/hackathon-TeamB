@@ -22,7 +22,9 @@ function CommentGet() {
 
   useEffect(() => {
     // Google Sheetsからデータを取得
-    fetch(`https://sheets.googleapis.com/v4/spreadsheets/${apiKey}/values/sheet1?key=${docId}`)
+    fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${apiKey}/values/sheet1?key=${docId}`
+    )
       .then((res) => res.json())
       .then((data) => {
         setDatas(CsvDic(data.values));
@@ -31,11 +33,14 @@ function CommentGet() {
         console.error("エラーが発生しました:", error);
       });
   }, [docId, apiKey]);
-useEffect(() => {
+  useEffect(() => {
     if (datas.length > 0 && containerRef.current) {
       // datasがセットされたらコメント要素を作成して流す処理を開始
       datas.forEach((item, index) => {
-        createScrollingComment(item.コメントを入力してください || "なし", index);
+        createScrollingComment(
+          item.コメントを入力してください || "なし",
+          index
+        );
       });
     }
   }, [datas]);
@@ -43,7 +48,6 @@ useEffect(() => {
   const createScrollingComment = (text: string, index: number) => {
     if (!containerRef.current) return;
 
-    
     const divText = document.createElement("div");
     divText.textContent = text;
     divText.style.position = "absolute";
@@ -57,7 +61,7 @@ useEffect(() => {
     divText.style.left = `${containerWidth}px`;
 
     // top位置をランダムで決定（コメントが重ならないよう工夫が必要なら座標計算を行う）
-    const randomTop = Math.random() * (containerHeight - 20); 
+    const randomTop = Math.random() * (containerHeight - 20);
     divText.style.top = `${randomTop}px`;
 
     containerRef.current.appendChild(divText);
@@ -67,7 +71,7 @@ useEffect(() => {
     const totalMove = containerWidth + divText.clientWidth;
     gsap.to(divText, {
       x: -totalMove,
-      duration: 5+10/text.length, // アニメーション速度はお好みで
+      duration: 5 + 10 / text.length, // アニメーション速度はお好みで
       ease: "linear",
       onComplete: () => {
         // アニメーションが終わったら要素を削除
@@ -79,11 +83,10 @@ useEffect(() => {
   return (
     <div
       ref={containerRef}
+      className="relative overflow-hidden p-10"
       style={{
-        position: "relative",
         width: "100vw",
-        height: "100vh",
-        overflow: "hidden",
+        height: "50vh",
         // background: "#000" // 背景色はお好みで
       }}
     >

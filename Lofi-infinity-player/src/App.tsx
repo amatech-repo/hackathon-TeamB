@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "motion/react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -51,10 +51,9 @@ function App() {
 
     // エスケープ処理
     const escapedData: string = formData.replace(/</g, "&lt;");
-    
 
     console.log("送信するデータ:", escapedData);
-    setSubmitted(true)
+    setSubmitted(true);
   };
 
   return (
@@ -97,51 +96,49 @@ function App() {
           className="mb-8"
         >
           <form
-           action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfVg1ZIQ_9bl8DCTaHTfLDs3hBikF32FrnyoCxWgwIZ32dJCQ/formResponse"
-           target="hidden_iframe"
-           method="post"
-           onSubmit={(e)=>handleSubmit(e)}
+            action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSfVg1ZIQ_9bl8DCTaHTfLDs3hBikF32FrnyoCxWgwIZ32dJCQ/formResponse"
+            target="hidden_iframe"
+            method="post"
+            onSubmit={(e) => handleSubmit(e)}
           >
-          <label
-            htmlFor="dailyGoal"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
-            今日の目標は何ですか？
-          </label>
-          <Input
-            type="text"
-            id="dailyGoal"
-            placeholder="目標を入力してください"
-            className="w-full"
-            name="entry.2011066903"
-            required
-            value={formData}
-            onChange={(e)=>handleChange(e)}
-          />
-           <motion.div
-          custom={3}
-          variants={popUpVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <Button className="w-full" type="submit" value="送信">
-            作業開始
-          </Button>
-        </motion.div>
+            <label
+              htmlFor="dailyGoal"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              今日の目標は何ですか？
+            </label>
+            <Input
+              type="text"
+              id="dailyGoal"
+              placeholder="目標を入力してください"
+              className="w-full"
+              name="entry.2011066903"
+              required
+              value={formData}
+              onChange={(e) => handleChange(e)}
+            />
+            <motion.div
+              custom={3}
+              variants={popUpVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              <Button className="w-full" type="submit" value="送信">
+                作業開始
+              </Button>
+            </motion.div>
           </form>
         </motion.div>
         <iframe
-  onLoad={() => {
-    if (submitted) {
-      window.location.href = "/bgm"; // リロードを行う
-    }
-  }}
-  id="hidden_iframe"
-  name="hidden_iframe"
-  style={{ display: "none" }}
-></iframe>
-
-       
+          onLoad={() => {
+            if (submitted) {
+              window.location.href = "/bgm"; // リロードを行う
+            }
+          }}
+          id="hidden_iframe"
+          name="hidden_iframe"
+          style={{ display: "none" }}
+        ></iframe>
       </div>
     </motion.main>
   );
