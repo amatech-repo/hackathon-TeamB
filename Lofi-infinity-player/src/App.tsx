@@ -81,8 +81,8 @@ function App() {
           className="relative flex place-items-center mb-8"
         >
           <img
-            className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert rounded-lg"
-            src="/placeholder.svg?height=200&width=200"
+            className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert rounded-lg w-full h-full"
+            src="/logo.png"
             alt="App Thumbnail"
             width={200}
             height={200}
