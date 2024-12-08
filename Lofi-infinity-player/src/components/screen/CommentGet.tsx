@@ -8,8 +8,10 @@ interface Comment {
 
 function CommentGet() {
   const [datas, setDatas] = useState<Comment[]>([]);
+  const [len, setLen] = useState<number>(0);
   const docId = import.meta.env.VITE_GOOGLE_SHEETS_DOC_ID;
   const apiKey = import.meta.env.VITE_GOOGLE_SHEETS_API_KEY;
+  var tmp_length = 0
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -21,10 +23,9 @@ function CommentGet() {
   };
 
   useEffect(() => {
-    // Google Sheetsからデータを取得
-    fetch(
-      `https://sheets.googleapis.com/v4/spreadsheets/${apiKey}/values/sheet1?key=${docId}`
-    )
+    const fetchCommentlist = (apiKey:string, docId:string) => {
+      // Google Sheetsからデータを取得
+      fetch(`https://sheets.googleapis.com/v4/spreadsheets/${apiKey}/values/sheet1?key=${docId}`)
       .then((res) => res.json())
       .then((data) => {
         setDatas(CsvDic(data.values));
@@ -32,22 +33,32 @@ function CommentGet() {
       .catch((error) => {
         console.error("エラーが発生しました:", error);
       });
+    }
+
+    fetchCommentlist(apiKey,docId)
+    const intervalId = setInterval(function(){fetchCommentlist(apiKey,docId)}, 5000); // 5秒ごとにデータ取得
+    return () => clearInterval(intervalId);
   }, [docId, apiKey]);
-  useEffect(() => {
-    if (datas.length > 0 && containerRef.current) {
+
+useEffect(() => {
+    if (datas.length > 0 && containerRef.current && datas.length > len) {
       // datasがセットされたらコメント要素を作成して流す処理を開始
       datas.forEach((item, index) => {
-        createScrollingComment(
-          item.コメントを入力してください || "なし",
-          index
-        );
+        createScrollingComment(item.コメントを入力してください || "なし", index);
       });
-    }
+      setLen(datas.length)
+      console.log(len)
+      console.log(datas.length)
+  }
+  // tmp_length = datas.length
+  // console.log(tmp_length)
+  // console.log(datas.length)
   }, [datas]);
 
   const createScrollingComment = (text: string, index: number) => {
     if (!containerRef.current) return;
 
+    
     const divText = document.createElement("div");
     divText.textContent = text;
     divText.style.position = "absolute";
@@ -61,7 +72,7 @@ function CommentGet() {
     divText.style.left = `${containerWidth}px`;
 
     // top位置をランダムで決定（コメントが重ならないよう工夫が必要なら座標計算を行う）
-    const randomTop = Math.random() * (containerHeight - 20);
+    const randomTop = Math.random() * (containerHeight - 20); 
     divText.style.top = `${randomTop}px`;
 
     containerRef.current.appendChild(divText);
@@ -71,7 +82,7 @@ function CommentGet() {
     const totalMove = containerWidth + divText.clientWidth;
     gsap.to(divText, {
       x: -totalMove,
-      duration: 5 + 10 / text.length, // アニメーション速度はお好みで
+      duration: +10/text.length, // アニメーション速度はお好みで
       ease: "linear",
       onComplete: () => {
         // アニメーションが終わったら要素を削除
@@ -83,10 +94,11 @@ function CommentGet() {
   return (
     <div
       ref={containerRef}
-      className="relative overflow-hidden p-10"
       style={{
-        width: "100%",
-        height: "100%",
+        // position: "relative",
+        width: "100vw",
+        height: "100vh",
+        overflow: "hidden",
         // background: "#000" // 背景色はお好みで
       }}
     >
