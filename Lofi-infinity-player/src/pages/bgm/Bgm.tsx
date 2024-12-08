@@ -9,6 +9,7 @@ import effectUrls from "./dummyEffetcts";
 import dummyBgms from "./dummyBgms";
 import CommentGet from "../../components/screen/CommentGet";
 import { Button } from "@/components/ui/button";
+import { contours } from "d3";
 
 const BGMs = () => {
   let playedBgms = [];
@@ -102,6 +103,7 @@ const BGMs = () => {
       autoplay: 0,
       disablekb: 1,
       color: "white",
+      controls :0
     },
   };
   // height: "390",
@@ -137,7 +139,8 @@ const BGMs = () => {
             iframeClassName="w-full h-full"
             className="w-full aspect-[640/360]"
           />
-          <input
+          <div className="flex">
+            <input
             id="volume"
             type="range"
             min="0"
@@ -148,10 +151,16 @@ const BGMs = () => {
             }
             className="mt-4 w-full"
           />
+          <div className="flex justly-center pt-3">
+            <Button onClick={onFinishTask}>作業を終える</Button>
+            <Button onClick={onBgmChange}>曲を変更</Button>
+          </div>
+          
+          </div>
+          
         </div>
 
-        <Button onClick={onFinishTask}>作業を終える</Button>
-        <Button onClick={onBgmChange}>曲を変更</Button>
+        
 
         {/* 右側 エフェクトプレイヤーセクション（中央揃え） */}
         <div className="flex-1 items-center justify-center hidden">
