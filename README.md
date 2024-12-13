@@ -1,5 +1,5 @@
 # プロダクト名 
-![Infinite-Lofi-player](/logo.png)
+![Infinite-Lofi-player](/Lofi-infinity-player/public/logo.png)
 
 ## プロダクト説明
 勉強や作業などの目標を一言入力し、開始ボタンを押すと作業BGMが流れるwebサイトを作成しました！
